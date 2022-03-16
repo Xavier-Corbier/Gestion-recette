@@ -1,0 +1,72 @@
+<div class="my-5">
+  <h1 class="text-center my-3">Liste des fiches techniques</h1>
+  <div *ngIf="ficheTechniques == undefined || (ficheTechniques && ficheTechniques.length > 0)" class="row">
+    <div class="col-sm d-flex justify-content-center">
+      <select #selectElement (change)="onChangeCategorie(selectElement.value)" class="browser-default custom-select my-2">
+        <option value="" selected>Toutes les catégories</option>
+        <option *ngFor="let categorie of tabCategorieRecette" value="{{categorie.nomCategorie}}">
+          {{categorie.nomCategorie}}
+        </option>
+      </select>
+    </div>
+    <div class="col-sm d-flex justify-content-center">
+      <div class="input-group my-2 float-right ">
+        <input type="search" class="form-control rounded"  #searchInput (keyup)="onSearchFiche(searchInput.value)" placeholder="Recherche" aria-label="Recherche"
+               aria-describedby="search-addon" />
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+    <div class="my-2 col-sm d-flex justify-content-center md-form input-group">
+        <app-search-bar class="w-100" nameDisplay="Sélectionner des ingrédients" *ngIf="listIngredient!=undefined" [mutliple]="true" (resultatTab)="handleChangesSearchIngredient($event)" [options]="searchBarService.convertIngredientFicheTechnique(listIngredient!)">
+        </app-search-bar>
+    </div>
+  </div>
+  <div class="overflow-auto " style="height: 50vh">
+      <!-- Affichage de la liste -->
+      <table *ngIf="ficheTechniques == undefined || (ficheTechniques && ficheTechniques.length > 0)" class="table">
+        <thead>
+        <tr class="text-center table-dark">
+          <th scope="col">Nom</th>
+          <th scope="col">Auteur</th>
+          <th scope="col">Nombre couvert</th>
+          <th scope="col">Coût production</th>
+          <th scope="col" *ngIf="estConnecte">Actions</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let fiche of filter(ficheTechniques)">
+          <tr>
+            <th scope="row"><a [routerLink]="['/Fiche-Techniques/Lecture/'+fiche.header.idFicheTechnique]">{{fiche.header.nomPlat}}</a></th>
+            <td class="text-center">{{fiche.header.nomAuteur}}</td>
+            <td class="text-center">{{fiche.header.nbrCouvert}}</td>
+            <td class="text-center">{{fiche.header.coutProduction.toFixed(2).toString().replace(".", ",")}} €</td>
+            <td *ngIf="estConnecte">
+              <div class="row" style="margin-left: 0px;margin-right: 0px">
+                <div class="col-lg-6">
+                  <a type="button" class="btn w-100 btn-warning browser-default mx-1" [routerLink]="['/Fiche-Techniques/Modification/'+fiche.header.idFicheTechnique]" >Modifier</a>
+                </div>
+                <div class="col-lg-6">
+                  <button type="button" class="btn w-100 btn-danger browser-default mx-1" (click)="onClickDelete(fiche.header.idFicheTechnique? fiche.header.idFicheTechnique : '')">Supprimer</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="ficheTechniques && ficheTechniques.length == 0">
+          <h3 class="text-center my-5">Il n'y a pas de fiche technique encore !</h3>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-sm d-flex justify-content-center">
+      <div class="my-2  w-100" *ngIf="estConnecte">
+        <a class="btn btn-primary  btn-block" [routerLink]="['/Fiche-Techniques/Création']">Ajouter</a>
+      </div>
+    </div>
+    <div class="col-sm d-flex justify-content-center">
+      <app-pagination [tailleTableau]="tailleTabFilter()" [numberByPage]="numberByPage" (idPageEmit)="idPageEmit($event)"></app-pagination>
+    </div>
+  </div>
+</div>
+

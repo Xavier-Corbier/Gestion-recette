@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+(Gestion Fiche technique) as ft
+(Gestion Ingrédient) as gi
+(Gestion Alergène) as ga
+(Gestion Constante de coût) as co
+(Gestion Utilisateur) as uti
+
+User --> ft
+User --> gi
+User --> ga
+User --> co
+Admin --> uti
+User --> uti
+
+ft --> (Rechercher les fiches techniques)
+ft --> (CRUD fiche techniques)
+ft --> (Générer une etiquette)
+ft --> (Créer une vente)
+ft --> (Demande une fiche technique en pdf avec ou sans coût)
+
+gi --> (Ajouter du stock à un ingredient)
+gi --> (CRUD ingredient)
+gi --> (CRUD categorie d'ingrédient)
+gi --> (Modifier un alergène à un ingredient : ajouter/supprimer)
+
+ga --> (CRUD alergène)
+ga --> (CRUD catégorie d'alergène)
+@enduml

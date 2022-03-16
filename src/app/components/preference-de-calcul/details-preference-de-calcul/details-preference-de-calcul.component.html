@@ -1,0 +1,41 @@
+<div class="my-5">
+  <h1 class="text-center my-3">Préférence de calcul</h1>
+  <form [formGroup]="preferenceGroupe" (ngSubmit)="onSubmit()" class="p-5 my-3">
+    <table class="table">
+      <thead>
+      <tr class="table-dark">
+        <th scope="col">Nom</th>
+        <th scope="col">Champ de modification</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"><label for="defaultCoutMoyen">Coût moyen</label></th>
+          <td><input type="number" formControlName="coutMoyen" id="defaultCoutMoyen" class="form-control" placeholder="Coût moyen"></td>
+        </tr>
+        <tr>
+          <th scope="row"><label for="defaultCoutForfaitaire">Coût forfaitaire</label></th>
+          <td><input type="number" formControlName="coutForfaitaire" id="defaultCoutForfaitaire" class="form-control" placeholder="Coût forfaitaire"></td>
+        </tr>
+        <tr>
+          <th scope="row"><label for="defaultCoefPrixDeVente">Coefficient prix de vente</label></th>
+          <td><input type="number" formControlName="coefPrixDeVente" id="defaultCoefPrixDeVente" class="form-control" placeholder="coefficient prix de vente"></td>
+        </tr>
+        <tr>
+          <th scope="row"><label for="defaultCoefCoutProduction" >Coefficient coût de production</label></th>
+          <td><input type="number" formControlName="coefCoutProduction" id="defaultCoefCoutProduction" class="form-control" placeholder="coefficient coût de production"></td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Send button -->
+    <div class="text-center my-4">
+      <button  [disabled]="preferenceGroupe.invalid" class="btn btn-primary" type="submit">Enregistrer</button>
+      <p class="text-danger my-5">{{errorMessage}}</p>
+    </div>
+  </form>
+  <!--
+  <div class="text-center my-4">
+    <button class="btn btn-primary" (click)="updateDatabase()">Réinstall Database</button>
+  </div>-->
+</div>
+

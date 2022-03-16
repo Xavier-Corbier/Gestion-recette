@@ -1,0 +1,28 @@
+<!-- Default form login -->
+<form [formGroup]="utilisateurGroupe" (ngSubmit)="onSubmit()" class=" border border-light p-5 my-5">
+  <div class="text-center">
+    <p class="h4 mb-4">Compte utilisateur</p>
+  </div>
+
+  <!-- Nom -->
+  <label for="nom">Nom</label>
+  <input type="text" formControlName="nom" id="nom" class="form-control mb-4" placeholder="Nom">
+
+  <!-- Prenom -->
+  <label for="prenom">Prénom</label>
+  <input type="text" formControlName="prenom" id="prenom" class="form-control mb-4" placeholder="Prénom">
+
+  <!-- Email -->
+  <label for="defaultLoginFormEmail">E-mail</label>
+  <input type="email" formControlName="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+
+  <!-- Password -->
+  <label for="defaultLoginFormPassword">Mot de passe</label>
+  <input type="password" formControlName="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Mot de passe">
+
+  <!-- Sign in button -->
+  <div class="text-center" >
+    <button *ngIf="isPageModif||!isPageLecture" [disabled]="utilisateurGroupe.invalid" class="btn btn-primary" type="submit">{{isPageModif? "Modifier mon " : "Créer un "}}compte</button>
+    <p class="text-danger">{{errorMessage}}</p>
+  </div>
+</form>

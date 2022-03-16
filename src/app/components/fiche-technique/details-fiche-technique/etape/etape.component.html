@@ -1,0 +1,58 @@
+<form [formGroup]="etapeGroupe" >
+  <div class="row">
+    <div class="col-sm-6 overflow-auto">
+      <table class="table" *ngIf="this.etapeGroupe.controls['contenu'].value.length > 0">
+        <thead>
+          <tr class="table-dark text-center"><th colspan="4">Ingrédients</th></tr>
+          <tr class="table-light text-center">
+            <th width="25%" scope="row">Intitulé</th>
+            <th width="25%" scope="row">Quantité</th>
+            <th width="25%" scope="row">Unité</th>
+            <th *ngIf="!isPageLecture" width="25%" scope="row">Action</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="contenu" >
+          <tr class="text-center" *ngFor="let denree of contenu.controls; let i = index  "  [formGroupName]="i">
+            <td >{{denree.get("nomIngredient")?.value}}</td>
+            <td ><input mdbInput type="number" min="0" formControlName="nbrIngredient" #number (change)="onNumberChange($event,i,number.value)"  class="form-control" > </td>
+            <td >{{denree.get("unite")?.value}}</td>
+            <td *ngIf="!isPageLecture"><a (click)="deleteIngredient(i)" class="btn btn-danger browser-default mx-1 text-white">X</a>  </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="my-2" *ngIf="!isPageLecture">
+        <div class="md-form input-group my-2 float-right ">
+          <app-search-bar class="w-100" nameDisplay=" + Ajouter un ingrédient" *ngIf="listIngredient!=undefined" (resultat)="handleChangesSearchIngredient($event)" [options]="searchBarService.convertIngredientFicheTechnique(listIngredient!)">
+          </app-search-bar>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <table class="table mb-0">
+        <thead>
+          <tr class="table-dark text-center"> <th colspan="4">Description</th></tr>
+          <tr class="table-light text-center row" style="display: contents">
+            <th scope="col" class="col-sm-9">Nom étape</th>
+            <th scope="col" class="col-sm-3">Durée</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td  scope="row"> <input mdbInput type="text" formControlName="nomEtape" id="nameEtap" class="form-control" (change)="emitEtape()" > </td>
+            <td  scope="row"> <input mdbInput type="number" min="0" formControlName="duree" id="duree" class="form-control" (change)="emitEtape()" > </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table border-top">
+        <thead>
+        <tr class="table-light text-center"><th  scope="row">Technique de réalisation</th></tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td> <textarea mdbInput [readonly]="isPageLecture" type="text" formControlName="technique" id="technique" class="form-control" (change)="emitEtape()" ></textarea> </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</form>

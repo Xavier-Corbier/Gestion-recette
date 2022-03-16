@@ -1,0 +1,46 @@
+<!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark green" [containerInside]="true">
+
+  <!-- Navbar brand -->
+  <mdb-navbar-brand><a class="navbar-brand font-weight-bold mr-2" routerLink="Fiche-Techniques">Site Recettes</a></mdb-navbar-brand>
+
+  <!-- Collapsible content -->
+  <links>
+
+    <!-- Links Left-->
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link waves-light" routerLink="Ingrédients" mdbWavesEffect *ngIf="estConnecte">Ingrédients</a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link waves-light" routerLink="Allergènes" mdbWavesEffect *ngIf="estConnecte">Allergènes</a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link waves-light" routerLink="Préférences/Calcul" mdbWavesEffect *ngIf="estAdmin" >Préférence de calcul</a>
+      </li>
+    </ul>
+
+    <!-- Links Right-->
+    <ul class="navbar-nav ml-auto nav-flex-icons">
+      <li class="nav-item">
+        <a class="nav-link">
+          <div class="btn-group" mdbDropdown>
+            <mdb-icon fas icon="user" mdbDropdownToggle></mdb-icon>
+            <div class="dropdown-menu dropdown-menu-right dropdown-primary">
+              <a  class="dropdown-item" routerLink="Connexion" *ngIf="!estConnecte">Connexion</a>
+                                                                                        <!-- TODO :id -->
+              <a  class="dropdown-item" [routerLink]="'Utilisateurs/Lecture/'+uidUser"  *ngIf="estConnecte" >Mon profil</a>
+              <a  class="dropdown-item" [routerLink]="'Utilisateurs/Modification/'+uidUser"  *ngIf="estConnecte" >Modifier mon profil</a>
+              <a  class="dropdown-item" routerLink="Utilisateurs/Création" *ngIf="estConnecte && estAdmin" >Créer un compte</a>
+              <a  class="dropdown-item" routerLink="Utilisateurs" *ngIf="estConnecte && estAdmin" >Liste des utilisateurs</a>
+              <a  class="dropdown-item" (click)="onDeconnexion()" *ngIf="estConnecte" >Déconnexion</a>
+            </div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </links>
+  <!-- Collapsible content -->
+
+</mdb-navbar>
+<!--/.Navbar-->

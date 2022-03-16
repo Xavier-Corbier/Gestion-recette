@@ -1,0 +1,33 @@
+{
+	"GlobalFicheTechnique" : {
+		"header" : "FicheTechnique",
+		"progression" : [
+			{
+				"identification" : "Description  // si c'est une description normal",
+				"Contenu" : [
+					{
+						"ingredient " : "Ingredient // info ingrédient",
+						"nbrIngredient" : 5
+					},
+          {"..." :  "..."}
+				]
+			},
+			{
+				"identification" : {"nomProgression" : "nomFicheTechniqe // Si c'est une sous-fiche-technique", "temps" : 5},
+				"Contenu" : [
+								{
+									"identification" : "Description",
+									"Contenu" : [
+										{
+											"ingredient " : "Ingredient",
+											"nbrIngredient" : 5
+										},
+										{"..." :  "..."}
+									]
+								}
+							]
+			}
+
+		]
+	}
+}

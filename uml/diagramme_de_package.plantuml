@@ -1,0 +1,104 @@
+@startuml
+folder src [
+<b>src
+----
+
+]
+folder app [
+<b>app
+----
+
+]
+folder assets [
+<b>assets
+----
+
+]
+folder environments [
+<b>environments
+----
+environments.ts
+environments.prod.ts
+]
+folder services [
+<b>services
+----
+fiche-technique.service.ts
+categorie-recette.service.ts
+etape.service.ts
+denree.service.ts
+progression.service.ts
+description.service.ts
+vente.service.ts
+etiquette.service.ts
+store-app.service.ts
+ingredient.service.ts
+categorie-ingredient.service.ts
+allergène.service.ts
+]
+folder models [
+<b>models
+----
+fiche-technique.ts
+categorie-recette.ts
+etape.ts
+progression.ts
+description.ts
+denree.ts
+vente.ts
+etiquette.ts
+store-app.ts
+ingredient.ts
+categorie-ingredient.ts
+allergène.ts
+]
+folder components [
+<b>components
+----
+
+]
+folder utilisateur [
+<b>utilisateur
+----
+liste-utilisateur.component.ts
+details-utilisateur.component.ts
+login-utilisateur.component.ts
+]
+folder fichetechnique [
+<b>fiche-technique
+----
+liste-fiche-technique.component.ts
+details-fiche-technique.component.ts
+]
+folder ingrédient [
+<b>ingrédient
+----
+liste-ingrédient.component.ts
+details-ingrédient.component.ts
+]
+folder alergene [
+<b>alergene
+----
+liste-alergene.component.ts
+details-alergene.component.ts
+
+]
+folder preferenceDeCalcul [
+<b>préférence-de-calcul
+----
+details-preference-calcul.component.ts
+]
+
+src --> app
+src --> environments
+src --> assets
+app --> services
+app --> models
+app --> components
+components --> utilisateur
+components --> fichetechnique
+components --> ingrédient
+components --> alergene
+components --> preferenceDeCalcul
+
+@enduml

@@ -1,0 +1,58 @@
+<div>
+  <h3 class="text-center">{{this.ficheTechnique.identification}}</h3>
+  <mdb-tabs [fill]="true" [pills]="true" #tabs>
+    <mdb-tab *ngFor="let etape of ficheTechnique.etapes; let i = index">
+      <ng-template  mdbTabTitle>
+        <span>Etape-FT {{i+1}} </span>
+      </ng-template>
+      <div class="row">
+        <div class="col-sm-6 overflow-auto">
+          <table class="table">
+            <thead>
+            <tr class="table-dark text-center"><th colspan="4">Ingrédients</th></tr>
+            <tr class="table-light text-center">
+              <th width="25%" scope="row">Intitulé</th>
+              <th width="25%" scope="row">Quantité</th>
+              <th width="25%" scope="row">Unité</th>
+            </tr>
+            </thead>
+            <tbody  >
+            <tr class="text-center" *ngFor="let denree of etape.contenu; let i = index  ">
+              <td >{{denree.ingredient.nomIngredient}}</td>
+              <td >{{denree.number.toFixed(2).toString().replace(".", ",")}}</td>
+              <td >{{denree.ingredient.unite}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-sm-6">
+          <table class="table mb-0">
+            <thead>
+            <tr class="table-dark text-center"> <th colspan="4">Description</th></tr>
+            <tr class="table-light text-center row" style="display: contents">
+              <th scope="col" class="col-sm-9">Nom étape</th>
+              <th scope="col" class="col-sm-3">Durée</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center">
+              <td  scope="row"> {{etape.identification.nom}} </td>
+              <td  scope="row"> {{etape.identification.tempsPreparation}} </td>
+            </tr>
+            </tbody>
+          </table>
+          <table class="table border-top">
+            <thead>
+            <tr class="table-light text-center"><th  scope="row">Technique de réalisation</th></tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td> <p>{{etape.identification.description}}</p> </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mdb-tab>
+  </mdb-tabs>
+</div>

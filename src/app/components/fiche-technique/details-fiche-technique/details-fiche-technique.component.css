@@ -1,0 +1,45 @@
+.btn-copy {
+  color: #333 !important;
+  border-color: rgb(204 204 204) !important;
+}
+
+.materiel-input{
+  resize: none;
+}
+
+.panel-right{
+  border-left : solid 2px;
+}
+
+.md-form{
+  padding-left: 0px !important;
+}
+
+.container.col-5 .row .md-form, .container.col-6.pl-5.panel-right.etape .col-6.md-form{
+  margin: 0px;
+}
+
+.bordure{
+  border-right: grey solid 2px;
+}
+
+.success-lighter-hover {
+  color: #00C851;
+  -webkit-transition: .4s;
+  transition: .4s; }
+.success-lighter-hover:hover {
+  -webkit-transition: .4s;
+  transition: .4s;
+  color: #16ff74; }
+
+
+.beauty{
+  background: #ffc107;
+  border-radius: 13px;
+}
+
+.disabled_display{
+  opacity: 0.6;
+
+}
+

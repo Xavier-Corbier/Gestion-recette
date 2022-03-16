@@ -1,0 +1,292 @@
+<!-- Default form fiche technique -->
+<form [formGroup]="ficheTechniqueGroupe" (ngSubmit)="onSubmit()" class=" border border-light p-5 my-5">
+  <div class="text-center">
+    <p class="h4 mb-4">Fiche technique</p>
+  </div>
+  <div class="overflow-auto">
+    <table class="table w-100">
+      <thead>
+      <tr class="table-dark text-center">
+        <th width="30%" scope="col" colspan="1">Intitulé</th>
+        <th width="30%" scope="col" colspan="1">Catégorie</th>
+        <th scope="col">Responsable</th>
+        <th scope="col">Nombre de couvert</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row" colspan="1">
+          <input mdbInput type="text" [formControlName]="'nom'" id="nom" class="form-control" >
+        </th>
+        <th scope="row" colspan="1">
+          <!-- Catégorie -->
+          <div>
+            <div *ngIf="!isPageLecture" class="input-group">
+              <div style="width: 66%;">
+                <select *ngIf="select" class="form-control mb-4" [formControlName]="'categorie'" id="categorie">
+                  <option *ngFor="let categorie of tabCategorieRecette" value="{{categorie.nomCategorie}}">
+                    {{categorie.nomCategorie}}
+                  </option>
+                </select>
+                <input *ngIf="!select" type="text" [formControlName]="'categorie_text'" id="categorie_text" class="form-control mb-4" placeholder="Catégorie">
+              </div>
+              <div style="width: 34%">
+                <a class="btn btn-primary w-100 text-white" (click)="onChangeTypeInput()">{{select ? "Ajout" : "Selection"}}</a>
+              </div>
+            </div>
+            <select *ngIf="isPageLecture" class="form-control mb-4" [formControlName]="'categorie'" id="categorie-lecture">
+              <option selected="true">Choisir une categorie</option>
+              <option *ngFor="let categorie of tabCategorieRecette" value="{{categorie.nomCategorie}}">
+                {{categorie.nomCategorie}}
+              </option>
+            </select>
+          </div>
+        </th>
+        <th scope="row">
+          <input mdbInput type="text" [formControlName]="'auteur'" id="responsable" class="form-control" >
+        </th>
+        <th scope="row">
+          <input mdbInput type="number" min="0" [formControlName]="'nombreDeCouvert'" id="nbrCouvert" class="form-control" >
+        </th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <mdb-tabs [fill]="true" #tabs (activeTabChange)="onTabChange($event)">
+    <mdb-tab *ngFor="let etapeFiche of this.globalFT.progression; let i = index" >
+      <ng-template  mdbTabTitle>
+        <mdb-icon *ngIf="!isPageLecture && i>0" (click)="deplaceEtape(i,'gauche')"  class="mr-1" fas icon="angle-left"></mdb-icon>
+        Etape <span>{{i+1}}</span>
+        <mdb-icon *ngIf="!isPageLecture" (click)="removeEtape(i)" far icon="times-circle red-text ml-1"></mdb-icon>
+        <mdb-icon *ngIf="!isPageLecture && i<this.globalFT.progression.length-1" (click)="deplaceEtape(i,'droite')"  class="ml-1" fas icon="angle-right"></mdb-icon>
+      </ng-template>
+      <!-- Si c'est une étape on lance son composant pour la gérer -->
+      <app-etape *ngIf="etapeFiche.identification === undefined" [etape]="etapeFiche.etapes[0]" [isPageModif]="isPageModif" [isPageLecture]="isPageLecture" [listIngredient]="tabIngredient" (etapeValidateEmit)="etapeEmit(i,$event)" ></app-etape>
+      <!-- Sinon on lance le composant de la sous-fiche-technique our la gérer -->
+      <app-etape-fiche-technique *ngIf="etapeFiche.identification" [ficheTechnique]="etapeFiche" ></app-etape-fiche-technique>
+    </mdb-tab>
+    <!-- tab Ajout Etape + Etape Spécial-->
+    <mdb-tab  *ngIf="!isPageLecture || (globalFT.materielDressage || globalFT.materielSpecifique)">
+      <ng-template mdbTabTitle>
+        <span>{{isPageLecture? "Materiel" : "Ajouter"}}</span>
+      </ng-template>
+      <div *ngIf="!isPageLecture" class="overflow-auto mb-3">
+        <table class="table">
+          <thead>
+          <tr class="text-center table-dark">
+            <th colspan="2">Ajout d'élément </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="text-center">
+              <a (click)="ajoutEtape()" class="btn btn-copy mx-1 my-2 w-100">
+                + Ajouter un étape
+              </a>
+            </td>
+            <td class="text-center" width="50%">
+              <div class="input-group my-2 w-100">
+                <app-search-bar class="w-100" nameDisplay='+ Ajouter une fiche technique' *ngIf="listNameFichesTechniques!=undefined" (resultat)="handleChangesSearchFT($event)" [options]="searchBarService.convertNameFicheTechnique(listNameFichesTechniques!)">
+                </app-search-bar>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table class="table">
+          <thead>
+            <tr class="text-center table-dark">
+              <th colspan="2">{{isPageLecture? "Description des matériels" : "Ajout de matériel"}}</th>
+            </tr>
+            <tr class="text-center table-white">
+              <th scope="col">Matériels spécifiques</th>
+              <th scope="col">Matériels de dressage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">
+                <textarea type="text" [readonly]="isPageLecture" [formControlName]="'materielSpecifique'" id="materielSpecifique" class="materiel-input form-control" ></textarea>
+              </td>
+              <td class="text-center">
+                <textarea type="text" [readonly]="isPageLecture" [formControlName]="'materielDressage'" id="materielDressage" class="materiel-input form-control" ></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mdb-tab>
+    <!-- tab calcul -->
+    <mdb-tab>
+      <ng-template mdbTabTitle class="blue">
+        <span>Calculs</span>
+      </ng-template>
+      <div class=" mb-3">
+        <div class="row my-3">
+          <div class="col-sm-12 overflow-auto">
+            <table *ngIf="listDenreeRecette && listDenreeRecette.length > 0" class="table mb-0">
+              <thead>
+              <tr class="table-dark text-center">
+                <th colspan="3">Dénomination</th>
+                <th colspan="3">Valorisation</th>
+              </tr>
+              <tr class="table-light text-center row" style="display: contents">
+                <th scope="col" class="col-sm-2">Nature</th>
+                <th scope="col" class="col-sm-2 bordure">Unité</th>
+                <th scope="col" class="col-sm-2">Total</th>
+                <th scope="col" class="col-sm-2">Prix U</th>
+                <th scope="col" class="col-sm-2">PTHT</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let denree of listDenreeRecette" class="text-center">
+                <td>{{denree.ingredient.nomIngredient}} <i *ngIf="denree.ingredient.qteIngredient<=0" class="fas fa-exclamation-circle"></i></td>
+                <td class="bordure">{{denree.ingredient.unite}}</td>
+                <td>{{roundNumber(denree.number)}}</td>
+                <td>{{roundNumber(denree.ingredient.prixUnitaire)}}€</td>
+                <td>{{roundNumber(denree.number * denree.ingredient.prixUnitaire)}}€</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+         <!--- Alert pas d'ingrédient -->
+          <mdb-card *ngIf="listDenreeRecette==undefined ||  listDenreeRecette.length == 0" class="col-sm-12 my-4 text-center">
+            <mdb-card-body>
+              <div class="alert alert-danger" role="alert">
+                Vous n'avez pas enregistré d'ingrédient dans votre fiche technique.
+              </div>
+            </mdb-card-body>
+          </mdb-card>
+          <!-- Tableau des résultats intermédiaires-->
+          <div *ngIf="listDenreeRecette!=undefined && listDenreeRecette.length > 0" class="col-sm-12 text-center my-4 overflow-auto">
+            <table class="table mb-0">
+              <thead>
+              <tr class="table-dark text-center">
+                <th colspan="12">Calculs des charges</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="text-left"> <!-- cout des matières-->
+                <th scope="col">Total denrées </th>
+                <td>{{roundNumber(globalFT.header.coutMatiere)}}€</td>
+                <th scope="col">ASS 5%</th>
+                <td>{{roundNumber(globalFT.header.coutMatiere * 0.05)}}€</td>
+                <th scope="col">Coût matières</th>
+                <td>{{roundNumber(globalFT.header.coutMatiereTotal)}}€</td>
+              <tr  class="text-left">  <!-- cout des charges -->
+                <th scope="row">Durée total</th>
+                <td>{{ globalFT.header.dureeTotal}} min</td>
+                <th scope="row">Coût personnel </th>
+                <td>{{roundNumber(globalFT.header.coutPersonnel)}}€</td>
+                <th  scope="row">Coût fluides </th>
+                <td>{{roundNumber(globalFT.header.coutFluide)}}€</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      <!-- Liste d'input pour modifier les valeurs des coûts et coef -->
+        <div class="text-center overflow-auto">
+          <table class="table m-0">
+            <thead>
+            <tr class="table-dark text-center">
+              <th colspan="4">Gestion des coûts de la fiche technique</th>
+            </tr>
+            <tr class="table-white text-center">
+              <th *ngIf="globalFT.header.isCalculCharge" colspan="1">Coût moyen horaire</th>
+              <th *ngIf="globalFT.header.isCalculCharge" colspan="1">Coût fluide</th>
+              <th colspan="1">{{globalFT.header.isCalculCharge? 'Coef coût de production' : 'Coef prix de vente (utilisé sur le coût matière uniquement)' }}</th>
+              <th colspan="1">Avec charges</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center">
+              <td *ngIf="globalFT.header.isCalculCharge">
+                <input type="number" min="0" [formControlName]="'coutMoyenHorraire'" id="coutMoyenHorraire" class="form-control">
+              </td>
+              <td *ngIf="globalFT.header.isCalculCharge">
+                <input mdbInput type="number" min="0" [formControlName]="'coutFluide'" id="coutFluide" class="form-control" >
+              </td>
+              <td>
+                <input *ngIf="globalFT.header.isCalculCharge" mdbInput type="number" min="0" [formControlName]="'coefCoutDeProduction'" id="coutProduction" class="form-control" >
+                <input *ngIf="!globalFT.header.isCalculCharge" mdbInput type="number" min="0" [formControlName]="'coefPrixDeVente'" id="coefPrixDeVente" class="form-control" >
+              </td>
+              <td>
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" [checked]="globalFT.header ? globalFT.header.isCalculCharge : true" (change)="changeCalculCharge($event)" class="custom-control-input" id="customSwitches" >
+                  <label class="custom-control-label" for="customSwitches"></label>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <!-- Tableau des résultats finaux  -->
+          <table class="table mb-0" >
+            <thead>
+            <tr class="table-dark text-center">
+              <th colspan="12">Résultats</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-left">
+              <th colspan="2" class="table-white">Coût de production total</th>
+              <td colspan="2">{{roundNumber(this.globalFT.header.coutProduction)}}€</td>
+              <th colspan="2" class="table-white" >Prix de vente (HT) total</th>
+              <td colspan="2" >{{roundNumber(globalFT.header.prixDeVenteTotalHT)}}€</td>
+              <th colspan="2" class="table-white" >Bénéfice total</th>
+              <td colspan="2">{{roundNumber(globalFT.header.beneficeTotal)}}€</td>
+            </tr>
+            <tr class="text-left">
+              <th colspan="2" class="table-white" >Coût de production par portion</th>
+              <td colspan="2"> {{roundNumber(globalFT.header.coutProductionPortion)}}€</td>
+              <th colspan="2" class="table-white" >Prix de vente (HT) par portion</th>
+              <td colspan="2">{{roundNumber(globalFT.header.prixDeVentePortionHT)}}€</td>
+              <th colspan="2" class="table-white" >Bénéfice par portion</th>
+              <td colspan="2">{{roundNumber(globalFT.header.beneficeParPortion)}}€</td>
+            </tr>
+            <tr class="text-left">
+              <th colspan="2" class="table-white" >Seuil de rentabilité</th>
+              <td colspan="2">{{globalFT.header.seuilRentabilite}} / {{globalFT.header.nbrCouvert}} portions</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mdb-tab>
+  </mdb-tabs>
+  <!-- Save button -->
+  <div *ngIf="isPageLecture&&!estConnecte" class="border-top">
+    <div class="my-3 ">
+      <app-impression-fiche [globalFT]="globalFT" ></app-impression-fiche>
+    </div>
+  </div>
+  <div *ngIf="!isPageModif&&!isPageLecture" class="border-top">
+    <div class="text-center my-3 ">
+      <button [class]="'ml-3 btn btn-primary '+(isValidate(false)? '': 'disabled_display')" type="submit" >Créer ma fiche technique</button>
+    </div>
+  </div>
+  <div *ngIf="isPageLecture&&estConnecte" class="border-top">
+    <div class="row">
+      <div class=" col-sm-3 my-3 ">
+        <app-vente [idFicheTechnique]="id" [listDenree]="listDenreeRecette" [nombreCouvert]="globalFT.header.nbrCouvert"></app-vente>
+      </div>
+      <div class=" col-sm-3 my-3 ">
+        <app-impression-etiquette [name]="globalFT.header.nomPlat" [idFicheTechnique]="id" [listDenree]="listDenreeRecette" [nombreCouvert]="globalFT.header.nbrCouvert"></app-impression-etiquette>
+      </div>
+      <div class=" col-sm-3 my-3 ">
+        <app-impression-fiche [globalFT]="globalFT" ></app-impression-fiche>
+      </div>
+      <div class="col-sm-3 text-center my-3 ">
+        <a (click)="router.navigate(['Fiche-Techniques/Modification/'+id])" class="ml-3 btn btn-warning browser-default text-white" >Modifier</a>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isPageModif" class="border-top">
+      <div class=" text-center my-3 ">
+        <button [class]="'btn btn-warning browser-default text-white '+(isValidate(false)? '': 'disabled_display')" type="submit">Mettre à jour</button>
+      </div>
+  </div>
+</form>

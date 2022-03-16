@@ -1,0 +1,11 @@
+<!-- Default form login -->
+<form [formGroup]="utilisateurGroupe" (ngSubmit)="onSubmit()" class="text-center border border-light p-5 my-5">
+  <p class="h4 mb-4">Connexion</p>
+  <!-- Email -->
+  <input type="email" formControlName="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+  <!-- Password -->
+  <input type="password" formControlName="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Mot de passe">
+  <!-- Sign in button -->
+  <button  [disabled]="utilisateurGroupe.invalid" class="btn btn-primary" type="submit">Connexion</button>
+  <p class="text-danger">{{errorMessage}}</p>
+</form>

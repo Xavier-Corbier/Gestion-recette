@@ -1,0 +1,97 @@
+@startuml
+class FicheTechnique
+FicheTechnique : - idFicheTechnique : String
+FicheTechnique : - nomPlat : String
+FicheTechnique : - nomAuteur : String
+FicheTechnique : - nbrCouvert : int
+FicheTechnique : - coûtMoyen : double
+FicheTechnique : - coûtForfaitaire : double
+FicheTechnique : - coefPrixDeVente : double
+FicheTechnique : - coefCoutProduction : double
+FicheTechnique : + nbrIngredientTotal() : int
+FicheTechnique : + coutProduction() : double
+FicheTechnique : + prixDeVente() : double
+FicheTechnique : + coutMatiere() : double
+FicheTechnique : + coutCharges() : double
+FicheTechnique : + beneficeParPortion() : double
+FicheTechnique : + seuilDeRentabilite() : double
+FicheTechnique : + coutPersonnel() : double
+FicheTechnique : + coutDesFluide() : double
+FicheTechnique : + appliquerVente(int nombre) : void
+FicheTechnique : + imprimerEtiquette(int nombre, boolean estVente) : void
+FicheTechnique : + imprimerFicheTechnique(boolean avecCout) : void
+
+note "On applique le coefficient de coût matière dans le calcul général" as N2
+N2 .. FicheTechnique
+
+class CategorieRecette
+CategorieRecette : - nomCategorie
+
+interface Etape
+
+
+
+class Description
+Description : - nom
+Description : - description
+Description : - tempsPreparation
+
+
+class Progression
+
+
+
+class Denree
+Denree : - nbrIngredient
+
+
+class Vente
+Vente : - nbrPlatVendus
+Vente : - dateAchat : Date
+
+class Etiquette
+Etiquette : - idEtiquette : String
+Etiquette : - nomPlat : String
+Etiquette : - listeIngredient : {String nom,boolean estAllergène}[]
+Etiquette : - dateCreation : Date
+
+class StoreApp
+StoreApp : - coûtMoyen
+StoreApp : - coûtForfaitaire
+StoreApp : - coefPrixDeVente
+StoreApp : - coefCoutProduction
+
+class Ingredient
+Ingredient : - nomIngredient
+Ingredient : - QtéIngredient
+Ingredient : - PrixUnitaire
+Ingredient : - Unité
+Ingredient : + estAllergène()
+
+
+class CategorieIngredient
+CategorieIngredient : - nomCategorie
+
+class Allergène
+Allergène : - nom
+
+class Utilisateur
+Utilisateur : - nom
+Utilisateur : - prenom
+Utilisateur : - email
+Utilisateur : - motdepasse
+Utilisateur : - estAdmin
+
+FicheTechnique "*" -- "1" CategorieRecette : appartient
+Etiquette "*" -- "1" FicheTechnique : imprime
+Vente "*" -- "1" FicheTechnique : vend
+FicheTechnique "1" -- "1" Progression : contient
+Ingredient "1..*" -- "1" CategorieIngredient : appartient
+Ingredient "*" -- "*" Allergène : contient
+Etape "1" o-- "*" Denree : Utilise
+Denree "*" -- "1" Ingredient : Contient
+FicheTechnique  --> StoreApp
+Progression o-- Etape
+Progression ..|> Etape
+Description ..|> Etape
+@enduml

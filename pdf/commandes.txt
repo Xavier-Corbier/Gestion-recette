@@ -1,0 +1,76 @@
+Lien utile :
+https://mdbootstrap.com/docs/angular/tables/pagination/
+https://mdbootstrap.com/docs/angular/getting-started/installation/ -- install
+
+
+
+Liste des commandes pour générer les components :
+// commande de import
+npm install angular-bootstrap-md --save
+npm install @angular/fire --save
+
+
+
+
+// models :
+ng g class models/fiche-technique
+ng g class models/categorie-recette
+ng g class models/etape
+ng g class models/progression
+ng g class models/description
+ng g class models/denree
+ng g class models/vente
+ng g class models/etiquette
+ng g class models/store-app
+ng g class models/ingredient
+ng g class models/categorie-ingredient
+ng g class models/allergène
+ng g class models/utilisateur
+
+
+// components :
+ng g c components/header
+ng g c components/utilisateur/liste-utilisateur
+ng g c components/utilisateur/details-utilisateur
+ng g c components/utilisateur/login
+ng g c components/fiche-technique/liste-fiche-technique
+ng g c components/fiche-technique/details-fiche-technique
+ng g c components/fiche-technique/details-fiche-technique/etape
+ng g c components/fiche-technique/details-fiche-technique/impression-etiquette
+ng g c components/fiche-technique/details-fiche-technique/impression-fiche
+ng g c components/fiche-technique/details-fiche-technique/vente
+ng g c components/allergene/details-allergene
+ng g c components/allergene/liste-allergene
+ng g c components/ingredient/details-ingredient
+ng g c components/ingredient/liste-ingredient
+ng g c components/preference-de-calcul/details-preference-de-calcul
+ng g c components/search-bar
+ng g c components/pagination
+
+
+// Services :
+ng g s services/auth-guard
+ng g s services/auth-guard-admin
+
+ng g s services/Utilisateur
+
+ng g s services/fiche-technique
+ng g s services/categorie-recette
+ng g s services/etape
+ng g s services/progression
+ng g s services/description
+ng g s services/denree
+ng g s services/vente
+ng g s services/etiquette
+ng g s services/store-app
+ng g s services/ingredient
+ng g s services/categorie-ingredient
+ng g s services/allergène
+ng g s services/search-bar
+ng g s services/print-pdf
+ng g s services/manage-database
+
+// guard
+ng g guard auth-guard
+
+ng serve

@@ -1,0 +1,38 @@
+<!-- Default form allergènes -->
+<form [formGroup]="allergeneGroupe" (ngSubmit)="onSubmit()" class=" border border-light p-5 my-5">
+  <div class="text-center">
+    <p class="h4 mb-4">Allergène</p>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <label for="nom">Nom</label>
+      <input type="text" formControlName="nom" id="nom" class="form-control mb-4" placeholder="Nom">
+    </div>
+    <div class="col-sm">
+      <div class="text-center">
+        <p>Liste des ingrédients</p>
+      </div>
+      <div *ngIf="!this.isPageLecture" class="input-group my-2">
+        <input type="search" class="form-control rounded"  #searchInput (keyup)="onSearchIngredient(searchInput.value)" placeholder="Recherche" aria-label="Recherche"
+               aria-describedby="search-addon" />
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+      <div class="border border-light overflow-auto" style="height: 30vh">
+        <div *ngFor="let ingredient of filterIngredient(); let i=index" class="px-3 py-2 border-bottom">
+          <label>
+            <input *ngIf="!this.isPageLecture" type="checkbox" [value]="ingredient.name" (change)="onCheckChange($event,i)" [checked]="ingredient.checked" class="m-2">
+            {{ingredient.name}}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Save button -->
+  <div class="text-center my-3 ">
+    <button *ngIf="!this.isPageLecture" [disabled]="allergeneGroupe.invalid" class="btn btn-primary" type="submit">{{(this.isPageModif) ? "Mettre à jour" : "Créer" }} mon allergène</button>
+    <p class="text-danger">{{errorMessage}}</p>
+  </div>
+</form>
+

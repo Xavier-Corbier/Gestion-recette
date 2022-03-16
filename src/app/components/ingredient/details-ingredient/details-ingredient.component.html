@@ -1,0 +1,72 @@
+<!-- Default form ingrédient -->
+<form [formGroup]="ingredientGroupe" (ngSubmit)="onSubmit()" class=" border border-light p-5 my-5">
+  <div class="text-center">
+    <p class="h4 mb-4">Ingrédient</p>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <!-- Nom -->
+      <label for="nom">Nom</label>
+      <input type="text" formControlName="nom" id="nom" class="form-control mb-4" placeholder="Nom"  >
+      <!-- Quantité -->
+      <label for="quantite">Quantité</label>
+      <input type="number" formControlName="quantite" id="quantite" class="form-control mb-4" placeholder="Quantité">
+      <!-- Unité -->
+      <label for="unite">Unité</label>
+      <input type="text" formControlName="unite" id="unite" class="form-control mb-4" placeholder="Unité">
+      <!-- Prix -->
+      <label for="prixUnitaire">Prix unitaire</label>
+      <input type="number" formControlName="prixUnitaire" id="prixUnitaire" class="form-control mb-4" placeholder="Prix unitaire">
+      <!-- Catégorie -->
+      <div>
+        <label for="categorie">Catégorie</label>
+        <div *ngIf="!isPageLecture" class="input-group">
+          <div class="w-75">
+            <select *ngIf="select" class="form-control mb-4" formControlName="categorie" id="categorie">
+              <option *ngFor="let categorie of tabCategorieIngredient" value="{{categorie.nomCategorie}}">
+                {{categorie.nomCategorie}}
+              </option>
+            </select>
+            <input *ngIf="!select" type="text" formControlName="categorie_text" id="categorie_text" class="form-control mb-4" placeholder="Catégorie">
+          </div>
+          <div class="w-25">
+            <a class="btn btn-primary w-100 text-white" (click)="onChangeTypeInput()">{{select ? "Ajout" : "Selection"}}</a>
+          </div>
+        </div>
+        <select *ngIf="isPageLecture" class="form-control mb-4" formControlName="categorie" id="categorie-lecture">
+          <option selected="true">Choisir une categorie</option>
+          <option *ngFor="let categorie of tabCategorieIngredient" value="{{categorie.nomCategorie}}">
+            {{categorie.nomCategorie}}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="isPageLecture" class="my-3">{{(ingredient!=undefined) ? "Valeur totale : "+ingredient.getCostStock().toFixed(2).toString().replace(".", ",") : ""}} €</div>
+    </div>
+    <div class="col-sm">
+      <div class="text-center">
+        <p>Liste des allergènes</p>
+      </div>
+      <div *ngIf="!this.isPageLecture" class="input-group my-2">
+        <input type="search" class="form-control rounded" #searchInput (keyup)="onSearchAllergene(searchInput.value)" placeholder="Recherche" aria-label="Recherche"
+               aria-describedby="search-addon" />
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+      <div class="border border-light overflow-auto" style="height: 30vh">
+        <div *ngFor="let allergene of filterAllergene(); let i=index" class="px-3 py-2 border-bottom">
+          <label>
+            <input *ngIf="!this.isPageLecture" type="checkbox" [value]="allergene.name" (change)="onCheckChange($event,i)" [checked]="allergene.checked" class="m-2">
+            {{allergene.name}}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Save button -->
+  <div class="text-center mx-3">
+    <button *ngIf="isPageModif||!isPageLecture" [disabled]="ingredientGroupe.invalid" class="btn btn-primary" type="submit">{{this.isPageModif ? "Mettre à jour" : "Créer mon ingrédient"}}</button>
+    <p class="text-danger">{{errorMessage}}</p>
+  </div>
+</form>
+

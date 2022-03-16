@@ -1,0 +1,66 @@
+<div class="my-5">
+  <h1 class="text-center my-3">Liste des ingrédients</h1>
+  <div class="row">
+    <div class="col-sm d-flex justify-content-center">
+      <select #selectElement (change)="onChangeCategorie(selectElement.value)" class="browser-default custom-select my-2">
+        <option value="" selected>Toutes les catégories</option>
+        <option *ngFor="let categorie of tabCategorieIngredient" value="{{categorie.nomCategorie}}">
+          {{categorie.nomCategorie}}
+        </option>
+      </select>
+    </div>
+    <div class="col-sm d-flex justify-content-center">
+      <div class="input-group my-2 float-right ">
+        <input type="search" class="form-control rounded"  #searchInput (keyup)="onSearchIngredient(searchInput.value)" placeholder="Recherche" aria-label="Recherche"
+               aria-describedby="search-addon" />
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-auto " style="height: 50vh">
+    <!-- Affichage de la liste -->
+    <table class="table">
+      <thead>
+      <tr class="text-center table-dark">
+        <th [class]="this.idSort==0? 'text-primary' : ''" (click)="setTypeSortTableau(0)" scope="col">Nom  <mdb-icon fas [icon]="'angle-'+(this.typeSort == -1 && this.idSort==0?'up':'down')"></mdb-icon></th>
+        <th [class]="this.idSort==1? 'text-primary' : ''" (click)="setTypeSortTableau(1)"  scope="col">Quantité  <mdb-icon fas [icon]="'angle-'+(this.typeSort == -1 && this.idSort==1?'up':'down')"></mdb-icon></th>
+        <th scope="col">Unité</th>
+        <th [class]="this.idSort==2? 'text-primary' : ''" (click)="setTypeSortTableau(2)" scope="col">Prix unitaire <mdb-icon fas [icon]="'angle-'+(this.typeSort == -1 && this.idSort==2?'up':'down')"></mdb-icon></th>
+        <th [class]="this.idSort==3? 'text-primary' : ''" (click)="setTypeSortTableau(3)" scope="col">Valeur stock  <mdb-icon fas [icon]="'angle-'+(this.typeSort == -1 && this.idSort==3?'up':'down')"></mdb-icon></th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let ingredient of filter(tabIngredient);let indexOfelement=index">
+        <th scope="row"><a [routerLink]="['/Ingrédients/Lecture/'+ingredient.idIngredient]">{{ingredient.nomIngredient}}</a></th>
+        <td class="text-center">{{ingredient.qteIngredient.toFixed(2).toString().replace(".", ",")}}</td>
+        <td class="text-center">{{ingredient.unite}}</td>
+        <td class="text-center">{{ingredient.prixUnitaire.toFixed(2).toString().replace(".", ",")}} €</td>
+        <td class="text-center">{{ingredient.getCostStock().toFixed(2).toString().replace(".", ",")}} €</td>
+        <td>
+          <div class="row" style="margin-left: 0px;margin-right: 0px">
+            <div class="col-lg-6">
+              <a type="button" class="btn w-100 btn-warning browser-default mx-1" [routerLink]="['/Ingrédients/Modification/'+ingredient.idIngredient]" >Modifier</a>
+            </div>
+            <div class="col-lg-6">
+              <button type="button" class="btn w-100 btn-danger browser-default mx-1" (click)="onClickDelete(ingredient.idIngredient? ingredient.idIngredient : '')" >Supprimer</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col-sm d-flex justify-content-center">
+      <div class="my-2  w-100">
+        <a class="btn btn-primary  btn-block" [routerLink]="['/Ingrédients/Création']">Ajouter</a>
+      </div>
+    </div>
+    <div class="col-sm d-flex justify-content-center">
+      <app-pagination [tailleTableau]="tailleTabFilter()" [numberByPage]="numberByPage" (idPageEmit)="idPageEmit($event)"></app-pagination>
+    </div>
+  </div>
+</div>

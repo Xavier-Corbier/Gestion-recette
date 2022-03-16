@@ -1,0 +1,286 @@
+<div class="text-center">
+  <button type="button" class="btn btn-primary browser-default" (click)="imprimmerFicheModal.show()" >Imprimer fiche</button>
+</div>
+<div mdbModal #imprimmerFicheModal="mdbModal" class="modal fade" style="overflow-y:auto;" tabindex="-1" role="dialog" aria-labelledby="imprimmerModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="imprimmerFicheModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Impression Fiche</h4>
+      </div>
+      <div class="modal-body">
+        <div class="overflow-auto " style="height: 50vh">
+          <div id="fiche">
+            <div id="fiche-technique"  style="font-size: 9pt;">
+              <table class="table mb-0 border">
+                <thead>
+                <tr class="table-dark text-center">
+                  <th colspan="3">Fiche technique - {{date}}</th>
+                </tr>
+                <tr class="table-light text-center">
+                  <th width="50%" scope="row">Intitulé</th>
+                  <th width="25%" scope="row">Responsable</th>
+                  <th width="25%" scope="row">Nombre couvert</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center">
+                  <td>
+                    {{globalFT.header.nomPlat}}
+                  </td>
+                  <td>
+                    {{globalFT.header.nomAuteur}}
+                  </td>
+                  <td>
+                    {{globalFT.header.nbrCouvert}}
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <table class="table border mb-0">
+                <thead>
+                  <tr class="table-dark text-center">
+                    <th width="30%" scope="row">Denrées</th>
+                    <th width="5%" scope="row">Unités</th>
+                    <th width="5%" scope="row">Quantités</th>
+                    <th width="5%" scope="row">N° Phase</th>
+                    <th width="40%" scope="row">Techniques de réalisation</th>
+                    <th width="5%" scope="row">Durée</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let progression of globalFT.progression ; let index = index">
+                    <td>
+                      <div *ngFor="let etapeSousglobalFT of progression.etapes"> <!-- une seule si étape normale -->
+                        <p *ngFor="let denree of etapeSousglobalFT.contenu">{{denree.ingredient.nomIngredient}}<br></p>
+                      </div>
+                    </td>
+                    <td class="text-center" >
+                      <div *ngFor="let etapeSousglobalFT of progression.etapes"> <!-- une seule si étape normale -->
+                        <p *ngFor="let denree of etapeSousglobalFT.contenu">{{denree.ingredient.unite}}<br></p>
+                      </div>
+                    </td>
+                    <td class="text-center" >
+                      <div *ngFor="let etapeSousglobalFT of progression.etapes"> <!-- une seule si étape normale -->
+                        <p *ngFor="let denree of etapeSousglobalFT.contenu">{{denree.number}}<br></p>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      {{index+1}}
+                    </td>
+                    <td >
+                      <span *ngIf="progression.identification !== undefined" class="font-weight-bold " style="text-decoration: underline">{{progression.identification}} :</span>
+                      <p *ngFor="let etapeSousglobalFT of progression.etapes"> <!-- une seule si étape normale -->
+                        <span class="font-weight-bold">{{etapeSousglobalFT.identification.nom}} :</span><br>
+                        {{etapeSousglobalFT.identification.description}}
+                      </p>
+                    </td>
+                    <td class="text-center">
+                      {{progression.getDureeTotal}}'
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table mb-0 border">
+                <thead>
+                <tr class="text-center table-dark">
+                  <th>Matériels spécifiques</th>
+                  <th>Matériels de dressage</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>
+                    {{(globalFT.materielSpecifique=="") ? "Aucun" : ""}}
+                    <div *ngIf="globalFT.materielSpecifique==undefined">
+                      Aucun
+                    </div>
+                    <div *ngIf="globalFT.materielSpecifique!==undefined">
+                      <div *ngFor="let val of globalFT.materielSpecifique!.split('\n')!">{{val}}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="globalFT.materielDressage==undefined">
+                      Aucun
+                    </div>
+                    <div *ngIf="globalFT.materielDressage!=undefined">
+                      <div *ngFor="let val of globalFT.materielDressage!.split('\n')!">{{val}}</div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="printGroupe.value.withCost!" class="html2pdf__page-break"></div>
+            <div *ngIf="printGroupe.value.withCost!" class="my-1" style="font-size: 9pt;">
+              <table class="table mb-0 border">
+                <thead>
+                <tr class="table-dark text-center">
+                  <th colspan="2">Les coûts du plat</th>
+                </tr>
+                <tr class="table-white text-center">
+                  <th>Nom</th>
+                  <th>Valeur</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Bénéfice par portion
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.beneficeParPortion)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Bénéfice total
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.beneficeTotal)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coefficient coût de production
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coefCoutProduction)}} %
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coefficient prix de vente
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coefPrixDeVente)}} %
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût fluide (forfaitaire)
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coutFluide)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût matière
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coutMatiere)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût matière total (avec ASS 5%)
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coutMatiereTotal)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût moyen horaire
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coutMoyenHorraire)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût personnel
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coutPersonnel)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût production
+                    </td>
+                    <td>
+                      {{(globalFT.header.coutProduction==undefined) ? "0" : roundNumber(globalFT.header.coutProduction)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Coût production par portion
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.coutProductionPortion)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Prix de vente par portion HT
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.prixDeVentePortionHT)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Prix de vente total HT
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.prixDeVenteTotalHT)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Prix de vente par portion TTC
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.prixDeVentePortionTTC)}} €
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Prix de vente total TTC
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.prixDeVenteTotalTTC)}} €
+                    </td>
+                  </tr>
+                  <tr  class="text-center">
+                    <td class="font-weight-bold">
+                      Seuil de rentabilité
+                    </td>
+                    <td>
+                      {{globalFT.header.seuilRentabilite}} portions
+                    </td>
+                  </tr>
+                  <tr class="text-center">
+                    <td class="font-weight-bold">
+                      Durée totale
+                    </td>
+                    <td>
+                      {{roundNumber(globalFT.header.dureeTotal)}} min
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-top">
+        <form [formGroup]="printGroupe" class="m-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="withCost"  formControlName="withCost" checked>
+            <label class="form-check-label" for="withCost">
+              Avec coûts ?
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary browser-default" (click)="printFiche()">Imprimer</button>
+      </div>
+    </div>
+  </div>
+</div>

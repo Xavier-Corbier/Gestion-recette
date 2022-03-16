@@ -1,0 +1,13 @@
+<div class="my-2 float-right ">
+  <nav aria-label="Page navigation example"  >
+    <ul class="pagination" *ngIf="tabIdPage != undefined && tabIdPage.length > 1">
+      <li class="page-item"><a class="page-link" (click)="onPrecedent()" >Précédent</a></li>
+      <li *ngIf="idPage > intervalAffiche " class="page-item"><a class="page-link" (click)="onPage(tabIdPage[0])" >{{tabIdPage[0]}} ...</a></li>
+      <li *ngFor="let number of filterIdPage();" class="page-item">
+        <a (click)="onPage(number)"  class="page-link">{{number}}</a>
+      </li>
+      <li *ngIf="idPage + intervalAffiche < tabIdPage.length-1 " class="page-item"><a class="page-link" (click)="onPage(tabIdPage[tabIdPage.length-1])" >... {{tabIdPage[tabIdPage.length-1]}}</a></li>
+      <li class="page-item"><a class="page-link" (click)="onSuivant()" >Suivant</a></li>
+    </ul>
+  </nav>
+ </div>
